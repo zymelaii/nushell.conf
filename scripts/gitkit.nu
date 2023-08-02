@@ -1,3 +1,5 @@
+# Git plugin
+
 def parse-subcmd-brief [raw: string] {
     let raw = ($raw | str trim)
     let subcmd = ($raw | split column ' ' | first | get column1)
@@ -25,9 +27,21 @@ export def git-helper [
             ^git branch --all |
                 lines |
                 str substring 2.. |
-                parse -r '(remotes/(?<name>[^/]+)/)?((?!HEAD)(?<branch>[^/\s]*)|.*)$' |
+                parse -r '(remotes/(?<name>[^/]+)/)?((?!HEAD)(?<branch>[^\s]*)|.*)$' |
                 select name branch |
                 where branch != ''
+        },
+    }
+}
+
+def git-switch-completer [spans: list<string>] {
+    let n = ($spans | length)
+    match $n {
+        1 => {
+            git-helper branch |
+                where name == '' |
+                get branch |
+                filter {|e| $e | str starts-with $spans.2}
         },
     }
 }
