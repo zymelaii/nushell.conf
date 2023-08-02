@@ -4,7 +4,7 @@ export def "prompt home" [] {
     $'($env.USERPROFILE)(char psep).oh-my-posh'
 }
 
-# List available prompt themes
+# List available prompt themes.
 export def "prompt list" [] {
     ls (prompt home)
     | each {|e|
@@ -16,7 +16,7 @@ export def "prompt list" [] {
     | flatten
 }
 
-# Render prompt in the specific theme
+# Render prompt in the specific theme.
 export def "prompt display" [
     theme: string@"prompt list"
 ] {
@@ -39,7 +39,7 @@ export def "prompt display" [
         $'--terminal-width=($width)')
 }
 
-# Change prompt theme provided by oh my posh
+# Change prompt theme provided by oh my posh.
 export def-env prompt [
     theme?: string@"prompt list"
 ] {
@@ -51,7 +51,7 @@ export def-env prompt [
     $env.POSH_THEME = $'(prompt home)(char psep)($theme).omp.json'
 }
 
-export-env {
+export def-env "prompt init" [] {
     $env.POWERLINE_COMMAND = 'oh-my-posh'
     $env.PROMPT_INDICATOR = ''
     $env.POSH_PID = (random uuid)
